@@ -22,6 +22,14 @@ app.get('/cart', function(req,res){
     res.render("Customers/cart");
 })
 
+app.get('/login',function(req,res){
+    res.render("auth/login");
+})
+
+app.get('/register',function(req,res){
+    res.render("auth/register");
+})
+
 app.listen(PORT, ()=>{
     console.log(`listening on port ${PORT} `);
 })
