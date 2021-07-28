@@ -3,7 +3,19 @@ const app = express();
 const ejs=require('ejs');
 const path=require('path');
 const expressLayout=require('express-ejs-layouts');
+const mongoose=require('mongoose');
 const PORT = process.env.PORT || 3000;
+
+//Database connection
+const url='mongodb://localhost/pizza';
+mongoose.connect(url,{useNewUrlParser:true, useCreateIndex:true, useUnifiedTopology:true,
+    useFindAndModify:true});
+const connection=mongoose.connection;
+connection.once('open',()=>{
+    console.log('Database Connected...');
+}).catch(err=>{
+console.log('Connection failed...');
+});
 
 //Assets
 app.use(express.static('public'));
@@ -14,21 +26,8 @@ app.use(expressLayout);
 app.set('views', path.join(__dirname,'/resources/views'));
 app.set('view engine','ejs');
 
-app.get('/',function(req,res){
-    res.render("home");
-})
+require('./routes/web')(app);
 
-app.get('/cart', function(req,res){
-    res.render("Customers/cart");
-})
-
-app.get('/login',function(req,res){
-    res.render("auth/login");
-})
-
-app.get('/register',function(req,res){
-    res.render("auth/register");
-})
 
 app.listen(PORT, ()=>{
     console.log(`listening on port ${PORT} `);
